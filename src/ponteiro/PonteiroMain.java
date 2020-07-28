@@ -5,6 +5,8 @@ public class PonteiroMain {
 
 	public static void main(String[] args) {
 		
+		/*********** Com Tipos Primitivos e suas respectivas Wrapper ***********/
+		 
 		Integer valor1 = new Integer(3);
 
 		// Chama o método duplicar que duplica o valor passado
@@ -23,7 +25,9 @@ public class PonteiroMain {
 		System.out.println("Valor no Main depois do duplicar COM retorno: " + valor1); // Imprime o valor duplicado, no caso 6
 		
 		
-		/* Com POJO  */
+		
+		
+		/*********** Com POJO  ***********/
 		
 		// Agora vamos mostrar como uma classe própria
 		ClasseTeste classeTeste = new ClasseTeste(10);
@@ -34,7 +38,10 @@ public class PonteiroMain {
 		duplicar(classeTeste);
 		System.out.println("Valor da ClasseTeste DEPOIS de chamar o duplicar que recebe uma ClasseTeste como parâmetro: " + classeTeste.getValor());
 		
-		/* Com STRING */
+		
+		
+		
+		/*********** Com STRING ***********/
 		
 		// String não são passadas como referências também
 		// As alterações que você faz no método, só serão visiveis no escopo do método
@@ -82,7 +89,7 @@ public class PonteiroMain {
 	}
 	
 	// Ele recebe como parâmetro um objeto da ClasseTeste
-	// POJO novos, são passados como ponteiro (referência)
+	// POJO são passados como referência
 	// Então o valor será refletido de onde foi chamado e todos os lugares que apontam para o mesmo lugar da memória
 	private static void duplicar(ClasseTeste classeTeste) {
 		if(classeTeste != null) {
