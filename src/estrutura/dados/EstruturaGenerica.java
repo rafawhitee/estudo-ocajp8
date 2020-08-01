@@ -1,8 +1,6 @@
-package listaPropria;
+package estrutura.dados;
 
-import java.io.Serializable;
-
-public class Lista<T> implements Serializable {
+public abstract class EstruturaGenerica<T> implements InterfaceEstruturaGenerica<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,20 +18,21 @@ public class Lista<T> implements Serializable {
 	private int tamanhoMaximo = 10;
 
 	@SuppressWarnings("unchecked")
-	public Lista() {
+	public EstruturaGenerica() {
 		valor = (T[]) new Object[tamanhoMaximo];
 	}
 
-	public Lista(T[] valor) {
+	public EstruturaGenerica(T[] valor) {
 		this.valor = valor;
 	}
 
 	@SuppressWarnings("unchecked")
-	public Lista(int tamanhoMaximo) {
+	public EstruturaGenerica(int tamanhoMaximo) {
 		this.tamanhoMaximo = tamanhoMaximo;
 		valor = (T[]) new Object[tamanhoMaximo];
 	}
 
+	@Override
 	public void adicionar(T objeto) {
 		checarExpansao();
 		if (objeto != null) {
@@ -42,63 +41,29 @@ public class Lista<T> implements Serializable {
 			proximoIndex++;
 		}
 	}
+	
+//	@Override
+//	public void remover(int index) {
+//		valor[index] = null;
+//	}
 
-	public void remover(T objeto) {
-		if (objeto != null) {
-			for (int i = 0; i < valor.length; i++) {
-				if (valor[i].equals(objeto)) {
-					valor[i] = null;
-				}
-			}
-		}
-	}
-
-	public void remover(int index) {
-		valor[index] = null;
-	}
-
-	public void remover() {
-		valor[ultimoIndexInserido] = null;
-		proximoIndex--;
-		ultimoIndexInserido--;
-	}
-
-	/**** MÉTODOS PRIVADOS ****/
-
-	private void checarExpansao() {
-		boolean podeInserir = validaTamanhoMaximo();
-		if (!podeInserir)
-			expandirVetor();
-	}
-
-	// Se já tiver inserido o ultimo index do tamanho maximo atual
-	// Cria um novo array de T, com o dobro do tamanhoMaximoAtual
-	// Pega todos os dados já inseridos e passa para o mesmo index
-	@SuppressWarnings("unchecked")
-	private void expandirVetor() {
-		int novoTamanho = tamanhoMaximo * 2;
-		T[] novoValor = (T[]) new Object[novoTamanho];
-		pegarDadosJaInseridos(novoValor);
-		alterarValoresVetorExpandido(novoTamanho, novoValor);
-	}
-
-	// Faz o set do novo vetor e novo tamanho máximo
-	private void alterarValoresVetorExpandido(int novoTamanho, T[] novoValor) {
-		setValor(novoValor);
-		setTamanhoMaximo(novoTamanho);
-	}
-
-	// Popula os dados já inseridos no novoArray com o dobro de tamanho
-	private void pegarDadosJaInseridos(T[] novoValor) {
+	@Override
+	public void popularDadosJaInseridos(T[] novoValor) {
 		for (int i = 0; i < valor.length; i++) {
 			if (valor[i] != null) {
 				novoValor[i] = valor[i];
 			}
 		}
 	}
+	
+	@Override
+	public void alterarValoresVetorExpandido(int novoTamanho, T[] novoValor) {
+		setValor(novoValor);
+		setTamanhoMaximo(novoTamanho);
+	}
 
-	// Retorna true se já está no ultimo index
-	private boolean validaTamanhoMaximo() {
+	@Override
+	public boolean validaTamanhoMaximo() {
 		int ultimoIndex = ultimoIndex();
 		if (ultimoIndexInserido == ultimoIndex)
 			return false;
@@ -106,14 +71,21 @@ public class Lista<T> implements Serializable {
 		return true;
 	}
 
-	private int ultimoIndex() {
+	@SuppressWarnings("unchecked")
+	@Override
+	public void expandirVetor() {
+		int novoTamanho = tamanhoMaximo * 2;
+		T[] novoValor = (T[]) new Object[novoTamanho];
+		popularDadosJaInseridos(novoValor);
+		alterarValoresVetorExpandido(novoTamanho, novoValor);
+	}
+
+	@Override
+	public int ultimoIndex() {
 		return tamanhoMaximo - 1;
 	}
 
-	/**** FIM DOS MÉTODOS PRIVADOS ****/
-
-	// Pega o tamanho real do vetor (não o máximo)
-	// != null
+	@Override
 	public int tamanhoRealVetor() {
 		int retorno = 0;
 		for (int i = 0; i < valor.length; i++) {
@@ -123,7 +95,7 @@ public class Lista<T> implements Serializable {
 		return retorno;
 	}
 
-	// Retorna algumas informações importantes da Lista atual
+	@Override
 	public String getInfos() {
 		String retorno = "Tamanho total do Vetor: " + getTamanhoMaximo() + " \n";
 		retorno += "Tamanho real do Vetor: " + tamanhoRealVetor() + " \n";
@@ -131,7 +103,6 @@ public class Lista<T> implements Serializable {
 		return retorno;
 	}
 
-	/*** Getters and Setters dos valores da Classe Lista ***/
 	public T[] getValor() {
 		return valor;
 	}
@@ -163,15 +134,5 @@ public class Lista<T> implements Serializable {
 	public void setTamanhoMaximo(int tamanhoMaximo) {
 		this.tamanhoMaximo = tamanhoMaximo;
 	}
-
-	@Override
-	public String toString() {
-		String retorno = "";
-		for (int i = 0; i < valor.length; i++) {
-			if (valor[i] != null)
-				retorno += ("Valor na Posição " + i + ": " + valor[i] + " \n");
-		}
-		return retorno;
-	}
-
+	
 }
